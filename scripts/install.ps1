@@ -37,4 +37,5 @@ if ($currentPath -notlike "*$INSTALL_DIR*") {
 Remove-Item $TMP_DIR -Recurse -Force
 
 Write-Host "[INFO] Installed successfully!" -ForegroundColor Green
-Write-Host "[INFO] Restart terminal, then run: tool-change-account info" -ForegroundColor Green
+Write-Host ""
+& (Join-Path $INSTALL_DIR $INSTALL_NAME) info

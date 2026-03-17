@@ -62,4 +62,5 @@ mv "$TMP_DIR/$BINARY_NAME" "$INSTALL_DIR/$INSTALL_NAME"
 chmod +x "$INSTALL_DIR/$INSTALL_NAME"
 
 info "✅ Installed successfully!"
-info "Run: tool-change-account info"
+echo ""
+$INSTALL_DIR/$INSTALL_NAME info
