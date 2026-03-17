@@ -37,17 +37,10 @@ case "$OS" in
     ;;
 esac
 
-LATEST_TAG=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" | grep '"tag_name"' | sed 's/.*"tag_name": *"\([^"]*\)".*/\1/')
-
-if [ -z "$LATEST_TAG" ]; then
-  error "Cannot fetch latest release tag"
-fi
-
-DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${LATEST_TAG}/${ARTIFACT}"
+DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download/${ARTIFACT}"
 
 info "OS: $OS | Arch: $ARCH"
-info "Version: $LATEST_TAG"
-info "Downloading: $ARTIFACT"
+info "Downloading latest release..."
 
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
