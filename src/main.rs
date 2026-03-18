@@ -1,5 +1,9 @@
-use std::env;
-use std::process;
+mod commands;
+mod config;
+mod oauth;
+mod paths;
+mod protobuf;
+mod token;
 
 const VERSION: &str = "1.0.0";
 
@@ -10,32 +14,27 @@ fn print_help() {
     println!("    tool-change-account <COMMAND>");
     println!();
     println!("COMMANDS:");
-    println!("    change    Thực hiện thay đổi tài khoản");
+    println!("    info      Hiển thị thông tin account hiện tại");
     println!("    version   Hiển thị phiên bản");
 }
 
-fn cmd_change() {
-    println!("🔄 Đang thực hiện thay đổi tài khoản...");
-    // TODO: thêm logic change account ở đây
-    println!("✅ Hoàn tất!");
-}
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
+#[tokio::main]
+async fn main() {
+    let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 2 {
         print_help();
-        process::exit(0);
+        std::process::exit(0);
     }
 
     match args[1].as_str() {
-        "change" => cmd_change(),
+        "info" => commands::cmd_info().await,
         "version" | "--version" | "-v" => println!("{}", VERSION),
         "help" | "--help" | "-h" => print_help(),
         other => {
-            eprintln!("Error: Lệnh '{}' không tồn tại.", other);
-            eprintln!("Dùng 'tool-change-account help' để xem danh sách lệnh.");
-            process::exit(1);
+            eprintln!("Error: '{}' is not a valid command.", other);
+            eprintln!("Use 'tool-change-account help' to see available commands.");
+            std::process::exit(1);
         }
     }
 }
