@@ -20,12 +20,12 @@ irm https://raw.githubusercontent.com/ducphanvanntq/tool-change-account/main/scr
 
 Download binary từ [Releases](https://github.com/ducphanvanntq/tool-change-account/releases/latest):
 
-| OS | File |
-|----|------|
-| macOS (Intel) | `tool-change-account-macos-x86_64.tar.gz` |
+| OS                    | File                                       |
+| --------------------- | ------------------------------------------ |
+| macOS (Intel)         | `tool-change-account-macos-x86_64.tar.gz`  |
 | macOS (Apple Silicon) | `tool-change-account-macos-aarch64.tar.gz` |
-| Linux (x64) | `tool-change-account-linux-x86_64.tar.gz` |
-| Windows (x64) | `tool-change-account-windows-x86_64.zip` |
+| Linux (x64)           | `tool-change-account-linux-x86_64.tar.gz`  |
+| Windows (x64)         | `tool-change-account-windows-x86_64.zip`   |
 
 ## 🔧 Usage
 
@@ -47,6 +47,7 @@ Tạo file `.env` cùng thư mục với binary:
 ```
 CLIENT_ID=your_client_id
 CLIENT_SECRET=your_client_secret
+API_URL=aaaa
 ```
 
 ## 📄 License
