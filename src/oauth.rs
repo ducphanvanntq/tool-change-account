@@ -20,7 +20,7 @@ pub struct UserInfo {
 }
 
 pub async fn refresh_access_token(refresh_token: &str) -> Result<TokenResponse, String> {
-    let cfg = config::load_oauth_config()?;
+    let cfg = config::load_config()?;
     let client = reqwest::Client::new();
     let params = [
         ("client_id", cfg.client_id.as_str()),

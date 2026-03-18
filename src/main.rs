@@ -1,3 +1,4 @@
+mod api_client;
 mod commands;
 mod config;
 mod oauth;

