@@ -1,6 +1,7 @@
 use crate::{oauth, paths, token};
 use colored::Colorize;
 use indicatif::{ProgressBar, ProgressStyle};
+use std::io::{self, Write};
 use std::time::Duration;
 
 fn create_spinner(msg: &str) -> ProgressBar {
@@ -94,6 +95,22 @@ pub async fn cmd_info() {
             println!("     {} : {}", "Family Name".bold(), info.family_name.as_deref().unwrap_or("N/A").to_string().white());
             println!("     {} : {}", "Picture    ".bold(), info.picture.as_deref().unwrap_or("N/A").to_string().dimmed());
             println!();
+
+            // Prompt for token input
+            print!("  {} {}", "🔑".bold(), "Nhập token: ".bold().yellow());
+            io::stdout().flush().unwrap();
+
+            let mut input_token = String::new();
+            io::stdin().read_line(&mut input_token).unwrap();
+            let input_token = input_token.trim();
+
+            if input_token.is_empty() {
+                println!("  {} {}", "✘".red().bold(), "Không có token nào được nhập.");
+            } else {
+                println!();
+                println!("  {} Token đã nhập là: {}", "✔".green().bold(), input_token.cyan());
+                println!();
+            }
         }
         Err(e) => {
             sp.finish_and_clear();

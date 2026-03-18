@@ -77,6 +77,12 @@ jobs:
           cd target/${{ matrix.target }}/release
           7z a ../../../${{ matrix.artifact }} ${{ matrix.binary }}
 
+      - name: Compress with UPX (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y upx
+          upx --best --lzma target/${{ matrix.target }}/release/${{ matrix.binary }}
+
       - name: Package (Unix)
         if: runner.os != 'Windows'
         run: |
